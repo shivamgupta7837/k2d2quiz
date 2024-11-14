@@ -6,7 +6,7 @@ import 'package:quiz/database/data.dart';
 import 'package:quiz/view/navigation/fav.dart';
 import 'package:quiz/view/navigation/leaderboard.dart';
 import 'package:quiz/view/navigation/profile.dart';
-import 'package:quiz/view/quiz/user_info_Screen.dart';
+import 'package:quiz/view/navigation/user_info_Screen.dart';
 
 import '../../constants/fonts.dart';
 
@@ -19,17 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _customNavBarIndex = 0;
-  String? classDropdownValue;
-  String? chapterDropdownValue;
-  List<Map<String, String>> classes =
-      data["Kips"]!["CLASS"] as List<Map<String, String>>;
-  List<Map<String, String>> examChapters =
-      data["Kips"]!["CHAPTER"] as List<Map<String, String>>;
-  String? id;
 
-  List<Map<String, String>> classChapters = [];
-  final nameController = TextEditingController();
-  final subjectController = TextEditingController(text: "Computer");
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +56,8 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: bgColor,
-        title:
-            MyFonts.subHeading(data: "Hello Pooja Kapoor", color: buttonColor),
+        title:   MyFonts.bodyFont(data: "Note: For now there is only subject",color: Colors.red,fontweight: FontWeight.w500),
+           
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -83,14 +73,14 @@ class _HomePageState extends State<HomePage> {
                     fontweight: FontWeight.w600,
                     color: buttonColor),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
-                MyFonts.bodyFont(data: "Note: For now there is only subject",color: Colors.red,fontweight: FontWeight.w500),
+                    Divider(color: buttonColor.withOpacity(0.5),),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.62 ,
+                  height: MediaQuery.of(context).size.height * 0.65 ,
                   child: GridView.builder(
                       itemCount: 1,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -134,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 12,
                 ),
-                _customNavBar(context)
+            //    _customNavBar(context)
               ],
             ),
           ),
@@ -275,8 +265,8 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         _customNavBarIndex = 2;
                       });
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Favorites()));
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) => Favorites()));
                       setState(() {
                         _customNavBarIndex = 0;
                       });
@@ -336,149 +326,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-// for showing questions type options i need to use condition [where chapter id is equal to that id which is choose by user] then [add those catagory id in list  from CATEGORY_TAG_MASTER].
-
-
-//! This will use when we have image in grid view
-/*
-
-
-    TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    hintText: "Enter Name",
-                    hintStyle: GoogleFonts.poppins(
-                        color: blackColor.withOpacity(0.5)),
-                    prefixIcon: Icon(
-                      Icons.person,
-                      color: blackColor.withOpacity(0.5),
-                    ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  dropdownColor: Colors.white,
-                  padding: const EdgeInsets.all(5),
-                  decoration: InputDecoration(
-                      hintText: "Enter Class",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      isDense: true),
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: blackColor),
-                  value: classDropdownValue,
-                  items: classes
-                      .map((e) => e["NAME"]!)
-                      .toList()
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    classChapters.clear();
-                    final jsonObj = classes.firstWhere((element) {
-                      return element["NAME"] == newValue;
-                    });
-            
-                    setState(() {
-                      id = jsonObj["ID"];
-                      classDropdownValue = newValue;
-                    });
-            
-                    for (var i = 0; i < examChapters.length; i++) {
-                      if (examChapters[i]["CLASSID"] == id) {
-                        classChapters.add(examChapters[i]);
-                      }
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                 TextField(
-                  readOnly: true,
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    hintText: "Enter Subject",
-                    hintStyle: GoogleFonts.poppins(
-                        color: blackColor.withOpacity(0.5)),
-                    prefixIcon: Icon(
-                      Icons.person,
-                      color: blackColor.withOpacity(0.5),
-                    ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                ),
-                // DropdownButtonFormField<String>(
-                //   decoration: InputDecoration(
-                //       hintText: "Enter Chapters",
-                //       border:
-                //           OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                //       isDense: true),
-                //   style: GoogleFonts.poppins(
-                //       fontWeight: FontWeight.w500, fontSize: 14, color: blackColor),
-                //   value: chapterDropdownValue,
-                //   items: class_chapters
-                //       .map((e) => e["NAME"]!)
-                //       .toList()
-                //       .map<DropdownMenuItem<String>>((String value) {
-                //     return DropdownMenuItem<String>(
-                //       value: value,
-                //       child: Text(value),
-                //     );
-                //   }).toList(),
-                //   onChanged: (String? newValue) {
-                //     setState(() {
-                //       chapterDropdownValue = newValue;
-                //     });
-                //   },
-                // ),
-            
-                const SizedBox(height: 30),
-                classChapters.isEmpty
-                    ? Center(
-                        child: MyFonts.bodyFont(
-                            data: "Please Select class to view chapters",
-                            size: 16,
-                            fontweight: FontWeight.w500,
-                            color: buttonColor),
-                      )
-                    : SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        child: ListView.builder(
-                          itemCount: classChapters.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10.0),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 10),
-                                tileColor: whiteBg.withOpacity(0.6),
-                                leading: MyFonts.subHeading(
-                                    data: "Ch - ${index + 1}:",
-                                    size: 14,
-                                    color: buttonColor),
-                                onTap: () {},
-                                title: MyFonts.bodyFont(
-                                    data: classChapters[index]["NAME"]!,
-                                    color: buttonColor,
-                                    size: 16,
-                                    fontweight: FontWeight.w500),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-*/
