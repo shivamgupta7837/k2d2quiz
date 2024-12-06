@@ -36,7 +36,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
+  provider: ^6.1.2
   xml: 6.5.0
+  device_preview: 1.2.0
+  lottie: 2.6.0
+  shared_preferences: ^2.3.3
+  lordicon: ^1.0.3
+  just_audio: 0.9.42
+  image_picker: 1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +71,9 @@ flutter:
   assets:
      - assets/images/
      - assets/app_data/
+     - assets/animations/
+     - assets/icons/
+     - assets/audios/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -6,9 +6,10 @@ import 'package:quiz/database/data.dart';
 import 'package:quiz/view/navigation/fav.dart';
 import 'package:quiz/view/navigation/leaderboard.dart';
 import 'package:quiz/view/navigation/profile.dart';
-import 'package:quiz/view/navigation/user_info_Screen.dart';
+import 'package:quiz/view/navigation/choices.dart';
 
 import '../../constants/fonts.dart';
+import '../../constants/widgets/customWidget.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -19,7 +20,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _customNavBarIndex = 0;
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +54,7 @@ class _HomePageState extends State<HomePage> {
       //   ),
       // ),
       backgroundColor: bgColor,
-      appBar: AppBar(
-        backgroundColor: bgColor,
-        title:   MyFonts.bodyFont(data: "Note: For now there is only subject",color: Colors.red,fontweight: FontWeight.w500),
-           
-      ),
+      appBar: CustomWidget.buildAppBar(title:"Note: For now there is only one subject", appBarColor: bgColor,textColor: Colors.red,titleCenter: false,leadingNeeded: false,context: context),
       body: SafeArea(
         child: SingleChildScrollView(
           //physics: NeverScrollableScrollPhysics(),
@@ -73,58 +69,15 @@ class _HomePageState extends State<HomePage> {
                     fontweight: FontWeight.w600,
                     color: buttonColor),
                 const SizedBox(
-                  height: 15,
+                  height: 18,
                 ),
-                    Divider(color: buttonColor.withOpacity(0.5),),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.65 ,
-                  child: GridView.builder(
-                      itemCount: 1,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 0.9
-                      ),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => UserInfoScreen()));
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            height: 150,
-                            decoration: BoxDecoration(
-                                color: whiteBg.withOpacity(0.6),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/geometry.png",
-                                  height: 90,
-                                ),
-                                const SizedBox(
-                                  height: 40,
-                                ),
-                                MyFonts.subHeading(
-                                    data: "Computer", color: buttonColor)
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                ),
+               SizedBox(
+                height: MediaQuery.of(context).size.height * 0.65,
+                child: SearchGridView()),
                 const SizedBox(
                   height: 12,
                 ),
-            //    _customNavBar(context)
+                //    _customNavBar(context)
               ],
             ),
           ),
@@ -132,6 +85,8 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+
 
   Container _customNavBar(BuildContext context) {
     return Container(
@@ -323,6 +278,110 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+
+
+
+class SearchGridView extends StatefulWidget {
+  @override
+  _SearchGridViewState createState() => _SearchGridViewState();
+}
+
+class _SearchGridViewState extends State<SearchGridView> {
+  TextEditingController searchController = TextEditingController();
+  List<String> subjects = ["Computer"];
+  List<String> filteredSubjects = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initially, display all items
+    filteredSubjects = subjects;
+  }
+
+  // Function to filter the list based on search query
+  void filterSearch(String query) {
+    List<String> tempList = [];
+    if (query.isEmpty) {
+      tempList = subjects;
+    } else {
+      tempList = subjects
+          .where((subject) =>
+              subject.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      filteredSubjects = tempList;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          controller: searchController,
+          onChanged: (value) {
+            filterSearch(value);
+          },
+          decoration: InputDecoration(
+            hintText: 'Search Subject',
+            hintStyle: GoogleFonts.poppins(color: Colors.black),
+            prefixIcon: Icon(Icons.search),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(13),
+            ),
+          ),
+        ),
+        const SizedBox(height: 18),
+        Expanded(
+          child: GridView.builder(
+            padding: EdgeInsets.all(0),
+            itemCount: filteredSubjects.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.9,
+            ),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Choices()),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/images/Computer.png",
+                        height: 90,
+                      ),
+                      const SizedBox(height: 20),
+                      MyFonts.subHeading(
+                        data: filteredSubjects[index],
+                        color: blackColor,
+                        fontweight: FontWeight.w500
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

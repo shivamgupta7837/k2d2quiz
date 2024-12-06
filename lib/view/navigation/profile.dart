@@ -136,40 +136,7 @@ class Profile extends StatelessWidget {
                     fontweight: FontWeight.w500),
                 IconButton(
                     onPressed: () async {
-                    List<Map<String, String>> chapters =  data["Kips"]!["CHAPTER"] as List< Map<String, String>>;
-                    List<Map<String, String>> exam_chapters =  data["Kips"]!["EXAM_CHAPTER"] as List< Map<String, String>>;
-                    List<Map<String, String>> exam_question_master =  data["Kips"]!["EXAM_QUESTION_MASTER"] as List< Map<String, String>>;
-                    List<Map<String, String>> exam_option_master =  data["Kips"]!["EXAM_OPTION_MASTER"] as List< Map<String, String>>;
-                    List<Map<String, String>> exam_catagory_master =  data["Kips"]!["EXAM_CATEGORY_TAG_MASTER"] as List< Map<String, String>>;
-                    List<Map<String, String>> catagory_master =  data["Kips"]!["CATEGORY_MASTER"] as List< Map<String, String>>;
-                    List<Map<String, String>> catagory_tag_master =  data["Kips"]!["CATEGORY_TAG_MASTER"] as List< Map<String, String>>;
-                    List<Map<String, String>> option_master =  data["Kips"]!["OPTION_MASTER"] as List< Map<String, String>>;
-                    List<Map<String, String>> question_master =  data["Kips"]!["QUESTION_MASTER"] as List< Map<String, String>>;
-                    List<Map<String, String>> classes =  data["Kips"]!["CLASS"] as List< Map<String, String>>;
-
-                     for (int i=0;i<chapters.length;i++){ 
-                       print(chapters[i]["CLASSID"] == 1);
-                     }
-                      // final xmlString =
-                      //     await rootBundle.loadString('assets/app_data/data.xml');
-                      // final XmlDocument document = XmlDocument.parse(xmlString);
-
-                      // // Access elements and attributes
-                      // final rootElement = document.children;
-                      // rootElement.forEach((element) {
-                      //   print(element.getElement("EXAM_CHAPTER"));
-                      // });
-                      // print("Root Element: ${}");
-                      // final childElements =
-                      //     rootElement.findAllElements('child_tag');
-
-                      // for (final child in childElements) {
-                      //   final childText = child.value;
-                      //   print(childText);
-                      //   final childAttribute =
-                      //       child.getAttribute('attribute_name');
-                      //   print(childAttribute);
-                      // }
+                  
                     },
                     icon: Icon(
                       Icons.logout,
