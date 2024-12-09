@@ -5,6 +5,8 @@ import 'package:quiz/constants/alignments.dart';
 import 'package:quiz/constants/fonts.dart';
 import 'package:quiz/model/user_model.dart';
 import 'package:quiz/view/navigation/accounts/add_Accounts.dart';
+import 'package:quiz/view/navigation/choices.dart';
+import 'package:quiz/view/navigation/home.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/widgets/customWidget.dart';
@@ -23,25 +25,31 @@ class _AccountsState extends State<Accounts> {
       "name": "Ram Kumar",
       "class": "Class 1",
       "age": "9",
+      "gender":"Male"
     },
     {
       "id": "2",
       "name": "Heemesh Sharma",
       "class": "Class 2",
       "age": "8",
+      "gender":"Male"
     }
   ];
 
   String name = "";
   String age = "";
   String studentClass = "";
+  String gender = "";
   int index = 0;
+  int usersLength = 0;
+  String id = "";
 
   @override
   void initState() {
     name = users.first["name"];
     age = users.first["age"];
     studentClass = users.first["class"];
+    gender = users.first["gender"];
     super.initState();
   }
 
@@ -54,7 +62,7 @@ class _AccountsState extends State<Accounts> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_circle_left_outlined,
             size: 28,
             color: Colors.white,
@@ -73,7 +81,7 @@ class _AccountsState extends State<Accounts> {
             child: DropdownButton(
                 dropdownColor: buttonColor,
                 focusColor: Colors.white,
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_drop_down,
                   color: Colors.white,
                 ),
@@ -86,22 +94,64 @@ class _AccountsState extends State<Accounts> {
                 borderRadius: BorderRadius.circular(10),
                 isDense: true,
                 value: name,
+                // items: [
+                //   DropdownMenuItem(
+                //     value: users[0]["name"],
+                //     child: MyFonts.bodyFont(
+                //         data: users[0]["name"],
+                //         fontweight: FontWeight.w400,
+                //         color: Colors.white),
+                //   ),
+                //   DropdownMenuItem(
+                //     value: users[1]["name"],
+                //     child: MyFonts.bodyFont(
+                //       data: users[1]["name"],
+                //       fontweight: FontWeight.w400,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                //   DropdownMenuItem(
+                //     value: "Add Account",
+                //     child: TextButton(
+                //         style: TextButton.styleFrom(
+                //           backgroundColor: bgColor,
+                //         ),
+                //         onPressed: () {
+                //           // form for add account
+                //           Navigator.push(
+                //               context,
+                //               MaterialPageRoute(
+                //                 builder: (context) => AddAccounts(),
+                //               ));
+                //         },
+                //         child: MyFonts.bodyFont(
+                //           data: "Add Account",
+                //           fontweight: FontWeight.w600,
+                //           color: darkBlack,
+                //         )),
+                //   ),
+                // ],
+                //TODO:user object should need to pass for send data as parameter.
                 items: [
-                  DropdownMenuItem(
-                    value: users[0]["name"],
-                    child: MyFonts.bodyFont(
-                        data: users[0]["name"],
+                  ...users.map<DropdownMenuItem<String>>(
+                      (Map<String, dynamic> userDetails) {
+                    return DropdownMenuItem<String>(
+                      value: userDetails["name"],
+                      child: MyFonts.bodyFont(
+                        data: userDetails["name"],
                         fontweight: FontWeight.w400,
-                        color: Colors.white),
-                  ),
-                  DropdownMenuItem(
-                    value: users[1]["name"],
-                    child: MyFonts.bodyFont(
-                      data: users[1]["name"],
-                      fontweight: FontWeight.w400,
-                      color: Colors.white,
-                    ),
-                  ),
+                        color: Colors.white,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          name = userDetails["name"].toString();
+                          age = userDetails["age"];
+                          studentClass = userDetails["class"];
+                          gender = userDetails["gender"];
+                        });
+                      },
+                    );
+                  }),
                   DropdownMenuItem(
                     value: "Add Account",
                     child: TextButton(
@@ -109,7 +159,6 @@ class _AccountsState extends State<Accounts> {
                           backgroundColor: bgColor,
                         ),
                         onPressed: () {
-                          // form for add account
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -121,19 +170,11 @@ class _AccountsState extends State<Accounts> {
                           fontweight: FontWeight.w600,
                           color: darkBlack,
                         )),
-                  ),
+                  )
                 ],
-                //         items: users.map<DropdownMenuItem<String>>((String value) {
-                //   return DropdownMenuItem<String>(
-                //     value: value,
-                //     child: Text(value),
-                //   );
-                // }).toList(),
                 onChanged: (value) {
                   setState(() {
                     name = value.toString();
-                    studentClass = value.toString();
-                    age = value.toString();
                   });
                 }),
           )
@@ -141,11 +182,11 @@ class _AccountsState extends State<Accounts> {
       ),
       body: SafeArea(
           child: Padding(
-        padding: EdgeInsets.all(screenPadding),
+        padding: const EdgeInsets.all(screenPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Center(
+            const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -232,11 +273,13 @@ class _AccountsState extends State<Accounts> {
                   Row(
                     children: [
                       MyFonts.subHeading(data: "Gender: ", size: 16),
-                      MyFonts.bodyFont(data: name, fontweight: FontWeight.w400),
+                      MyFonts.bodyFont(data: gender, fontweight: FontWeight.w400),
                     ],
                   ),
-                  SizedBox(height: 50,),
-                    Center(
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Center(
                     child: SizedBox(
                       height: 50,
                       width: MediaQuery.of(context).size.width * 0.6,
@@ -244,7 +287,9 @@ class _AccountsState extends State<Accounts> {
                           style: ElevatedButton.styleFrom(
                               backgroundColor: buttonColor),
                           onPressed: () async {
-                          
+                            // print(users[0]["class"].toString().split('Class ')[1]);
+                            Navigator.of(context).push(_createRoute(studentClass
+                                .split('Class ')[1]));
                           },
                           child: Text(
                             "Go To Home Page",
@@ -263,4 +308,14 @@ class _AccountsState extends State<Accounts> {
       )),
     );
   }
+}
+
+Route _createRoute(user) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        HomePage(className: user),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return child;
+    },
+  );
 }

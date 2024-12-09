@@ -12,12 +12,12 @@ import 'package:quiz/view/navigation/accounts/accounts.dart';
 import 'package:quiz/view_model/add_user_provider.dart';
 
 void main() {
-  runApp(DevicePreview(
-    builder: (context) => const MyApp(),
-  ));
+  // runApp(DevicePreview(
+  //   builder: (context) => const MyApp(),
+  // ));
 
   // Use this when app is live in app store.
-  // runApp(const MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
           useMaterial3: true,
         ),
-        home:Accounts(),
+        home:SplashScreen(),
       ),
     );
   }

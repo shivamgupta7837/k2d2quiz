@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quiz/view/navigation/accounts/accounts.dart';
+import 'package:quiz/view/navigation/auth/login.dart';
 import 'package:quiz/view/navigation/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
             const Duration(seconds: 2),
-            () =>Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage())));
+            () =>Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen())));
   }
 
   @override

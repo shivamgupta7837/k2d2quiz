@@ -15,12 +15,10 @@ import 'package:quiz/view/navigation/choices.dart';
 class QuizScreen extends StatefulWidget {
   final List<Map<String, String>> question;
   final String catgoryType;
-  final String name;
   QuizScreen(
       {super.key,
       required this.question,
-      required this.catgoryType,
-      required this.name});
+      required this.catgoryType,});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();

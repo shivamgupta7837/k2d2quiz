@@ -29,7 +29,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomWidget.buildAppBar(appBarColor:  Color(0xff3f3d55), title: "Reset Password", textColor: Colors.white,size: 18,fontWeight: FontWeight.w600,leadingNeeded: true,context: context),
+      appBar: CustomWidget.buildAppBar(appBarColor:  Color(0xffec1146), title: "Forget Password", textColor: Colors.white,size: 18,fontWeight: FontWeight.w600,leadingNeeded: true,context: context),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -44,7 +44,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: 280,
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 50,
                 ),
                 inputForms(),
                 const SizedBox(
@@ -56,7 +56,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     width: MediaQuery.of(context).size.width * 0.6,
                     child: ElevatedButton(
                         style:
-                        ElevatedButton.styleFrom(backgroundColor: Color(0xff3f3d55)),
+                        ElevatedButton.styleFrom(backgroundColor: Color(0xffec1146)),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Accounts()));
@@ -154,7 +154,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         },
                         icon: const Icon(
                           Icons.lock_open_rounded,
-                          color: buttonColor,
+                          color: Color(0xffec1146),
                           size: 19,
                         ))
                         : IconButton(
@@ -165,7 +165,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         },
                         icon: const Icon(
                           Icons.lock,
-                          color: buttonColor,
+                          color: Color(0xffec1146),
                           size: 19,
                         )),
                     hintText: "Example: hfaiur374q"),
