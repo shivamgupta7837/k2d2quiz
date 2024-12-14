@@ -68,7 +68,14 @@ class _HomePageState extends State<HomePage> {
         classChapters.add(examChapters[i]);
       }
     }
+
+    subjects = listOfSubjects.first;
   }
+
+  List<String> listOfSubjects = [
+    "Computer",
+  ];
+  String? subjects;
 
   @override
   Widget build(BuildContext context) {
@@ -85,17 +92,56 @@ class _HomePageState extends State<HomePage> {
           context: context),
       body: SafeArea(
           child: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.26,
               padding: const EdgeInsets.all(screenPadding),
               color: buttonColor,
-              child: MyFonts.heading(
-                  data: "What Subject do \nyou want to improve today?",
-                  size: 28,
-                  fontweight: FontWeight.w600,
-                  color: bgColor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyFonts.heading(
+                      data: "What Subject do \nyou want to improve today?",
+                      size: 28,
+                      fontweight: FontWeight.w600,
+                      color: bgColor),
+                  // SizedBox(height: 20,),
+                  DropdownButton<String>(
+                    dropdownColor: buttonColor,
+                    iconEnabledColor: bgColor,
+                    hint: MyFonts.subHeading(
+                        data: "Select Subject",
+                        fontweight: FontWeight.w500,
+                        color: bgColor),
+                    items: listOfSubjects.map((item) {
+                      return DropdownMenuItem<String>(
+                        value: item,
+                        child: MyFonts.bodyFont(
+                          data: item,
+                          fontweight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      );
+                    }).toList(),
+                    underline: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 0.4, color: Colors.white),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    value: subjects, // Handle null case for unselected value
+                    onChanged: (value) {
+                      setState(() {
+                        subjects = value!; // Update the selected value
+                      });
+                    },
+                  )
+                ],
+              ),
             ),
             SearchChapters(
                 catagoryMaster: catagoryMaster,
@@ -139,6 +185,8 @@ class _SearchChaptersState extends State<SearchChapters> {
   TextEditingController _searchController = TextEditingController();
   List<Map<String, String>> filteredChapters = [];
 
+  bool isCheck = false;
+
   @override
   void initState() {
     super.initState();
@@ -154,15 +202,44 @@ class _SearchChaptersState extends State<SearchChapters> {
     });
   }
 
+  final generalRound = [];
+  final abbreviationRound = [];
+  final rapidFireRound = [];
+  final multipleChoiceRound = [];
+  final jumbledWordsRound = [];
+  final fillInTheMissingLettersRound = [];
+  final chapterIds = [];
+  final chapterIndexs = [];
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-
+        Container(
+          color: bgColor,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              MyFonts.subHeading(
+                  data: "What to Improve more than one Chapter?",
+                  size: 15,
+                  fontweight: FontWeight.w600,
+                  color: buttonColor),
+              Checkbox(
+                  side: BorderSide(color: buttonColor),
+                  value: isCheck,
+                  onChanged: (value) {
+                    chapterIndexs.clear();
+                    setState(() {
+                      isCheck = value!;
+                    });
+                  }),
+            ],
+          ),
+        ),
         Container(
           color: bgColor,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -183,11 +260,10 @@ class _SearchChaptersState extends State<SearchChapters> {
           ),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.64,
+          height: MediaQuery.of(context).size.height * 0.52,
           child: Container(
             color: bgColor,
             child: Scrollbar(
-              
               child: GridView.builder(
                 shrinkWrap: true,
                 padding: const EdgeInsets.symmetric(horizontal: screenPadding),
@@ -197,37 +273,76 @@ class _SearchChaptersState extends State<SearchChapters> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: GestureDetector(
                       onTap: () {
-                        widget.questionTypeIDs.clear();
                         final chapterID = filteredChapters[index]["ID"];
                         final List<Map<String, String>> categories = [];
                         final List<Map<String, String>> questions = [];
-                        for (var element in widget.catagoryTagMaster) {
-                          if (element["CHAPTERID"] == chapterID) {
-                            widget.questionTypeIDs.add(element["CATEGORYID"]!);
-                          }
-                        }
-              
-                        for (var categoriesIds in widget.catagoryMaster) {
-                          for (var questionTypeIDs in widget.questionTypeIDs) {
-                            if (categoriesIds["ID"] == questionTypeIDs) {
-                              categories.add(categoriesIds);
+
+                        // if more than one chapter then make list of IDs
+                        if (isCheck == false) {
+                          widget.questionTypeIDs.clear();
+                          for (var element in widget.catagoryTagMaster) {
+                            if (element["CHAPTERID"] == chapterID) {
+                              widget.questionTypeIDs
+                                  .add(element["CATEGORYID"]!);
                             }
                           }
+
+                          // print(widget.questionTypeIDs);
+
+                          for (var categoriesIds in widget.catagoryMaster) {
+                            for (var questionTypeIDs
+                                in widget.questionTypeIDs) {
+                              if (categoriesIds["ID"] == questionTypeIDs) {
+                                categories.add(categoriesIds);
+                              }
+                            }
+                          }
+
+                          _questionTypeDialogBox(context, categories, chapterID,
+                              index, questions, widget.questionMaster);
+                        } else {
+                          if (chapterIndexs.contains(index) == false) {
+                            chapterIndexs.add(index);
+                          }
+                          print(chapterIndexs);
+                          // if(chapterIndexs.contains(index)==false){
+                          // }
+                          //final chapterID = filteredChapters[index]["ID"];
+                          // chapterIds.add(chapterID);
+
+                          // if (chapterIndexs.isNotEmpty) {
+                          //   for (int i = 0; i < chapterIndexs.length; i++) {
+                          //     if (chapterIndexs[i] == index) {
+                          //       chapterIndexs.remove(index);
+                          //     }
+                          //   }
+                          // }
+
+                          /*
+                          TODO: add different types of question in respective lists and then show required list and name.
+                          TODO: Send all the questions to quiz app
+                          */
+
+                          setState(() {});
                         }
-              
-                        _questionTypeDialogBox(context, categories, chapterID,
-                            index, questions, widget.questionMaster);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
+                          border: chapterIndexs.contains(index)
+                              ? Border.all(color: Colors.red)
+                              : null,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
+                              color: chapterIndexs.contains(index)
+                                  ? Colors.red.withOpacity(0.4)
+                                  : Colors.grey.withOpacity(0.5),
+                              spreadRadius:
+                                  chapterIndexs.contains(index) ? 3 : 2,
+                              blurRadius:
+                                  chapterIndexs.contains(index) ? 5 : 2,
                               offset: const Offset(0, 3),
                             ),
                           ],
@@ -245,7 +360,8 @@ class _SearchChaptersState extends State<SearchChapters> {
                               margin: EdgeInsets.all(0),
                               padding: EdgeInsets.all(0),
                               width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.05,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.05,
                               child: Center(
                                 child: MyFonts.heading(
                                     data: "Ch - ${index + 1}",
@@ -255,7 +371,8 @@ class _SearchChaptersState extends State<SearchChapters> {
                               ),
                             ),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.02,
                             ),
                             Text(
                               filteredChapters[index]["NAME"]!,
@@ -271,14 +388,16 @@ class _SearchChaptersState extends State<SearchChapters> {
                     ),
                   );
                 },
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 15,
-                    childAspectRatio: 1.1),
+                    childAspectRatio:
+                        (MediaQuery.of(context).size.height * 0.4) /
+                            (MediaQuery.of(context).size.width * 0.7)),
               ),
             ),
           ),
-        ),
+        )
       ],
     );
   }
@@ -347,6 +466,7 @@ class _SearchChaptersState extends State<SearchChapters> {
                             size: 15,
                           ),
                           onTap: () {
+                            questions.clear();
                             for (var element in questionMaster) {
                               if (element["CATEGORYID"] ==
                                       catagories[index]["ID"] &&

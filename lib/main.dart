@@ -7,6 +7,7 @@ import 'package:quiz/view/navigation/accounts/add_Accounts.dart';
 import 'package:quiz/view/navigation/auth/login.dart';
 import 'package:quiz/view/navigation/home.dart';
 import 'package:quiz/view/navigation/navigation.dart';
+import 'package:quiz/view/navigation/scores_screen.dart';
 import 'package:quiz/view/navigation/splash_Screen.dart';
 import 'package:quiz/view/navigation/accounts/accounts.dart';
 import 'package:quiz/view_model/add_user_provider.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
           useMaterial3: true,
         ),
-        home:SplashScreen(),
+        home:Accounts(),
       ),
     );
   }

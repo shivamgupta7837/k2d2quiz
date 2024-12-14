@@ -71,7 +71,7 @@ class _AccountsState extends State<Accounts> {
         centerTitle: false,
         backgroundColor: buttonColor,
         title: MyFonts.bodyFont(
-            data: "Users",
+            data: "Choose User",
             color: Colors.white,
             size: 18,
             fontweight: FontWeight.w500),
@@ -131,7 +131,7 @@ class _AccountsState extends State<Accounts> {
                 //         )),
                 //   ),
                 // ],
-                //TODO:user object should need to pass for send data as parameter.
+    
                 items: [
                   ...users.map<DropdownMenuItem<String>>(
                       (Map<String, dynamic> userDetails) {
@@ -153,7 +153,7 @@ class _AccountsState extends State<Accounts> {
                     );
                   }),
                   DropdownMenuItem(
-                    value: "Add Account",
+                    value: "Add User",
                     child: TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: bgColor,
@@ -166,7 +166,7 @@ class _AccountsState extends State<Accounts> {
                               ));
                         },
                         child: MyFonts.bodyFont(
-                          data: "Add Account",
+                          data: "Add User",
                           fontweight: FontWeight.w600,
                           color: darkBlack,
                         )),

@@ -5,11 +5,13 @@ import '../fonts.dart';
 class CustomWidget {
   static  AppBar buildAppBar(
       {
+        bool needLeading=true,
         required BuildContext context,
         required Color appBarColor,
         required String title,
         required Color textColor,bool titleCenter = true,double size = 14,fontWeight = FontWeight.w500,leadingNeeded = true,leadingColor=Colors.white,double elevation = 0}) {
     return AppBar(
+      automaticallyImplyLeading: needLeading,
       elevation: elevation,
       leading:leadingNeeded==true ? IconButton(onPressed: (){
         Navigator.pop(context);

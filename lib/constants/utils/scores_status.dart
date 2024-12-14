@@ -1,0 +1,1 @@
+enum ScoresStatus { Excellent, Medium, LessMarks }
